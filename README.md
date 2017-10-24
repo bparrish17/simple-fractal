@@ -8,7 +8,7 @@ This application scores an engineer's coding and communication skills against ot
 By entering in a candidate ID, users can see that candidate's
 
 - ID
-- Job Tile 
+- Job Title 
 - Communication Score (With Percentile)
 - Coding Score (With Percentile)
 - Company ID
@@ -18,8 +18,8 @@ top candidates being highlighted yellow.
 
 # Scripts
 
-test - runs test scripts
-start - starts server
-run start-dev - builds webpack and watches for changes
-              - starts server
+- test : runs test scripts
+- start : starts server
+- run start-dev : builds webpack and watches for changes
+                : starts server
 
