@@ -16,10 +16,13 @@ By entering in a candidate ID, users can see that candidate's
 The user will also be able to see similar candidates and their respective scores, with 
 top candidates being highlighted yellow. 
 
-# Scripts
+## Scripts
 
 - test : runs test scripts
 - start : starts server
 - run start-dev : builds webpack and watches for changes
                 : starts server
 
+## Notes
+
+Boilermaker from previous school workshop used for basic set-up.
