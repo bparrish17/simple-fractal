@@ -22,7 +22,3 @@ top candidates being highlighted yellow.
 - start : starts server
 - run start-dev : builds webpack and watches for changes
                 : starts server
-
-## Notes
-
-Boilermaker from previous school workshop used for basic set-up.
