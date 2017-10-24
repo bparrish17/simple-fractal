@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {fetchCandidates, searchForCandidates} from './reducer';
-import store from './store'
-import Result from './result'
-import Similar from './similar'
+import {fetchCandidates, fetchCompanies, searchForCandidates} from '../store/reducer';
+import store from '../store'
+import Result from './Result'
+import Similar from './Similar'
 
 
 //Root Component
@@ -17,6 +17,7 @@ export default class Root extends Component {
       }
     componentDidMount() {
         store.dispatch(fetchCandidates())
+        store.dispatch(fetchCompanies())
         this.unsubscribe = store.subscribe(() => this.setState(store.getState()))
     }
     componentWillUnmount() {
@@ -34,6 +35,7 @@ export default class Root extends Component {
         let candidates = this.state.candidates
         let searchResult = this.state.searchResult
         let similar_candidates = this.state.similarCandidates
+        let percentiles = this.state.percentiles
         return (
             <div id="search-container" className="col-xs-10">
                 <h3>Search For Candidate</h3>
@@ -59,13 +61,13 @@ export default class Root extends Component {
                 <div>
                     {
                     searchResult
-                    ? <Result candidate={searchResult}/>
+                    ? <Result candidate={searchResult} percentiles={percentiles}/>
                     : <div></div> 
                     }
                     {/* To Ensure That 'No Results' Only Renders When Searched */}
                     {
                     searchResult === undefined
-                    ? <div className="alert alert-warning" role="alert">No Results.</div>
+                    ? <div id="no-results" className="alert alert-warning" role="alert">No Results Found</div>
                     : <div></div>
                     }
                 </div>

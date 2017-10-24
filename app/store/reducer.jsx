@@ -10,6 +10,7 @@ const initialState = {
 
 //Action Types
 export const GET_CANDIDATES = 'GET_CANDIDATES';
+export const GET_COMPANIES = 'GET_COMPANIES';
 export const SEARCH_CANDIDATE = 'SEARCH_CANDIDATE';
 export const FOUND_SIMILAR = 'FOUND_SIMILAR';
 export const FOUND_PERCENTILES = 'FOUND_PERCENTILES'
@@ -18,6 +19,11 @@ export const FOUND_PERCENTILES = 'FOUND_PERCENTILES'
 export const getCandidates = (candidates) => { 
     return {
         type: GET_CANDIDATES, candidates 
+    }
+}
+export const getCompanies = (companies) => { 
+    return {
+        type: GET_COMPANIES, companies
     }
 }
 export const searchCandidate = (candidate) => {
@@ -51,6 +57,16 @@ export function fetchCandidates () {
     }
 }
 
+export function fetchCompanies () {
+    return function thunk(dispatch) {
+      return axios.get('/api/companies')
+      .then(res => res.data)
+      .then(companies => {
+          dispatch(getCompanies(companies));
+        })
+    }
+}
+
 // Get All Candidates from Similar Companies, Titles, and Skills
 // + Calculate Percentile of Searched Candidate
 export function searchForCandidates (candidate_id) {
@@ -59,10 +75,13 @@ export function searchForCandidates (candidate_id) {
         .then(res => res.data)
         .then(candidates => {
             let candidate = candidates.find(candidate => candidate.candidate_id === candidate_id)
+
+            //Send Searched Candidate to Reducer
             dispatch(searchCandidate(candidate));
             if(candidate) {
-                getCompanies(candidate.company_id)
-                .then(similar_companies => findSimilarCandidates(candidate.title, candidates, similar_companies))
+                //Search for Similar Companies/Candidates then Calculate Percentile
+                getSimilarCompanies(candidate.company_id)
+                .then(similar_companies => getSimilarCandidates(candidate.title, candidates, similar_companies))
                 .then(similar_candidates => {
                     dispatch(foundSimilar(similar_candidates))
                     let percentiles = calculatePercentiles(candidate.communication_score, candidate.coding_score, similar_candidates)
@@ -74,18 +93,18 @@ export function searchForCandidates (candidate_id) {
 }
 
 // Get All Companies
-function getCompanies(id) {
+function getSimilarCompanies(id) {
     return axios.get('/api/companies')
     .then(res => res.data)
     .then(companies => {
         let found = companies.find(company => company.company_id === id)
-        return getSimilarCompanies(found, companies)
+        return sortSimilarCompanies(found, companies)
     })
 }
 
 //Helper Functions
 // Takes in a Company and Looks for Matches Based on Fractal Index
-function getSimilarCompanies(match, companies) {
+function sortSimilarCompanies(match, companies) {
     let similar_companies = [];
     companies.forEach(company => {
         if(areSimilar(company, match)) {
@@ -101,8 +120,9 @@ function areSimilar (company_1, company_2) {
 }
 
 // Goes Through Similar Companies to Find Candidates With Similar Titles
+// + add percentiles to each candidate
 // + returns all similar candidates
-function findSimilarCandidates(title, candidates, companies) {
+function getSimilarCandidates(title, candidates, companies) {
     let similar_candidates = [];
     companies.forEach(company => {
         candidates.forEach(candidate => {
@@ -111,10 +131,14 @@ function findSimilarCandidates(title, candidates, companies) {
             }
         })
     })
+    similar_candidates.forEach(candidate => {
+        candidate['percentiles'] = calculatePercentiles(candidate.communication_score, candidate.coding_score, similar_candidates)
+    })
     return similar_candidates;
 }
 
 // Calculates Percentile of Communication and Coding Scores for Candidate in Relation to Similar Candidates
+// + adds and sorts scores then calculates percentiles
 // + returns percentiles
 function calculatePercentiles(comm_score, coding_score, similar_candidates) {
     let sortNumber = (a, b) => a - b
@@ -132,13 +156,13 @@ function calculatePercentiles(comm_score, coding_score, similar_candidates) {
 
     let n = similar_comm.length
     let i = similar_comm.indexOf(Number(comm_score))
-    let comm_perc = 100*((i-0.5)/n) 
+    let comm_percentile = Math.abs(100*((i-0.5)/n)) 
 
     let n2 = similar_cod.length
     let i2 = similar_cod.indexOf(Number(coding_score))
-    let coding_perc = 100*((i2-0.5)/n2)
+    let coding_percentile = Math.abs(100*((i2-0.5)/n2))
 
-    return [comm_perc, coding_perc]
+    return [comm_percentile, coding_percentile]
 }
 
 
@@ -146,6 +170,8 @@ const reducer = function(state = initialState, action) {
     switch(action.type) {
         case GET_CANDIDATES:
             return Object.assign({}, state, {candidates: action.candidates})
+        case GET_COMPANIES:
+            return Object.assign({}, state, {companies: action.companies})
         case SEARCH_CANDIDATE:
             return Object.assign({}, state, {searchResult: action.candidate})
         case FOUND_SIMILAR: 

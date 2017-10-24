@@ -1,23 +1,15 @@
 import React, { Component } from 'react';
-import store from './store';
+import store from '../store';
 
 // Candidate Search Result Component
 export default class Root extends Component {
     constructor(props) {
         super(props);
-        this.state = store.getState();
-      }
-    componentDidMount() {
-        this.unsubscribe = store.subscribe(() => this.setState(store.getState()))
     }
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
     render() {
         const candidate = this.props.candidate
-        const comm_score = Math.round(this.state.percentiles[0])
-        const coding_score = Math.round(this.state.percentiles[1])
+        const comm_score = Math.round(this.props.percentiles[0])
+        const coding_score = Math.round(this.props.percentiles[1])
         return (
             <div>
                 <h3>Candidate Info</h3>
@@ -28,6 +20,7 @@ export default class Root extends Component {
                     <th>Title</th>
                     <th>Communication Score</th>
                     <th>Coding Score</th>
+                    <th>Company</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +29,7 @@ export default class Root extends Component {
                         <td>{candidate.title}</td>
                         <td>{candidate.communication_score} (Percentile: {comm_score})</td>
                         <td>{candidate.coding_score} (Percentile: {coding_score})</td>
+                        <td>{candidate.company_id}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -43,9 +37,3 @@ export default class Root extends Component {
         )
     }
 }
-// <div>
-//     <h3>Search Results For [ {candidate.candidate_id} ]</h3>
-//     <h4>Title: {candidate.title}</h4>
-//     <h4>Communication Score: {candidate.communication_score} ({comm_score} Percentile)</h4>
-//     <h4>Coding Score: {candidate.coding_score} ({coding_score} Percentile)</h4>
-// </div>

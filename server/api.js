@@ -25,6 +25,7 @@ api.get('/candidates', function(req, res, next) {
         .on('done', (error)=>{
             res.send(data)
             console.log('end', error)
+            next(error)
         })
 })
 
@@ -39,6 +40,7 @@ api.get('/companies', function(req, res, next) {
     .on('done', (error) => {
         res.send(data)
         console.log('end', error)
+        next(error)
     })
     
 })
