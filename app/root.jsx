@@ -4,11 +4,15 @@ import store from './store'
 import Result from './result'
 import Similar from './similar'
 
+
+//Root Component
+// Renders Main Page with Search Form
+// + Renders Candidate Search Result Component (Result)
+// + Renders Similar Candidates List Component (Similar)
 export default class Root extends Component {
     constructor() {
         super();
         this.state = store.getState();
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
     componentDidMount() {
@@ -17,10 +21,6 @@ export default class Root extends Component {
     }
     componentWillUnmount() {
         this.unsubscribe();
-    }
-
-    handleChange(event) {
-        //store.dispatch(writeStudent(event.target.value))
     }
 
     handleSubmit(event) {
@@ -33,7 +33,7 @@ export default class Root extends Component {
     render() {
         let candidates = this.state.candidates
         let searchResult = this.state.searchResult
-
+        let similar_candidates = this.state.similarCandidates
         return (
             <div>
                 <div>
@@ -58,13 +58,13 @@ export default class Root extends Component {
                     {searchResult
                     ? <Result candidate={searchResult}/>
                     : <div className="alert alert-warning" role="alert">
-                        No Results Found. Please Try Again.
+                        No Results.
                     </div>
                     }
                     </div>
                     <div>
-                    {this.state.similarCandidates.length
-                        ? this.state.similarCandidates.map(each => <Similar candidate={each} />)
+                    {similar_candidates.length && searchResult
+                        ? similar_candidates.map(each => <Similar candidate={each} />)
                         : <div></div>
                         }
                     </div>

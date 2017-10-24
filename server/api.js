@@ -10,6 +10,11 @@ const companies = './data/companies.csv'
 const companies_headers = ['company_id', 'fractal_index']
 const companies_data = [];
 
+//API Routes
+// Convert score-records.csv, companies.csv to json Objects
+// + Serve resulting json objects
+
+//score-records.csv -> json -> api/candidates
 api.get('/candidates', function(req, res, next) {
     let data = [];
     csv({noheader: false, headers: score_records_headers})
@@ -23,6 +28,7 @@ api.get('/candidates', function(req, res, next) {
         })
 })
 
+//companies.csv -> json -> api/companies
 api.get('/companies', function(req, res, next) {
     let data = [];
     csv({noheader: false, headers: companies_headers})

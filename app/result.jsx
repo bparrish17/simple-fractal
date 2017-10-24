@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import store from './store';
 
-
+// Candidate Search Result Component
 export default class Root extends Component {
     constructor(props) {
         super(props);
