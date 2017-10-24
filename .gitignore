@@ -5,5 +5,8 @@ node_modules/*
 public/bundle.js
 public/bundle.js.map
 
+package-lock.json
+webpack.config.js
+
 # NPM errors
 npm-debug.log
