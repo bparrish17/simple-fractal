@@ -17,7 +17,7 @@ api.get('/candidates', function(req, res, next) {
         .on('json',(jsonObj) => {
             data.push(jsonObj)
         })
-        .on('done',(error)=>{
+        .on('done', (error)=>{
             res.send(data)
             console.log('end', error)
         })
@@ -26,14 +26,15 @@ api.get('/candidates', function(req, res, next) {
 api.get('/companies', function(req, res, next) {
     let data = [];
     csv({noheader: false, headers: companies_headers})
-        .fromFile(companies)
-        .on('json',(jsonObj) => {
-            data.push(jsonObj)
-        })
-        .on('done', (error) => {
-            res.send(data)
-            console.log('end', error)
-        })
+    .fromFile(companies)
+    .on('json',(jsonObj) => {
+        data.push(jsonObj)
+    })
+    .on('done', (error) => {
+        res.send(data)
+        console.log('end', error)
+    })
+    
 })
 
 module.exports = api
