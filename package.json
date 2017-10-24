@@ -1,10 +1,10 @@
 {
   "name": "simple-fractal-assessment",
   "version": "0.0.1",
-  "description": "A review time project",
+  "description": "An Application for Assessing the Communication and Coding Skills of Engineers",
   "main": "index.js",
   "scripts": {
-    "test": "mocha **/*.test.js",
+    "test": "mocha **/*.test.js  **/*/*.test.js",
     "build": "webpack",
     "build-watch": "webpack -w",
     "start": "nodemon server",

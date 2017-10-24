@@ -18,7 +18,6 @@ describe('API Routes', () => {
             return request(app)
             .get('/api/candidates')
             .then(res => {
-                console.log(res.body[4])
                 expect(res.body[0].title).to.be.equal('Engineer')
                 expect(res.body[0].candidate_id).to.be.equal('889')
                 expect(res.body[0].communication_score).to.be.equal('114028')
@@ -51,6 +50,7 @@ describe('API Routes', () => {
             .then(res => {
                 expect(res.body[0].company_id).to.be.equal('1')
                 expect(res.body[0].fractal_index).to.be.equal('0.678')
+
                 expect(res.body[1].company_id).to.be.equal('2')
                 expect(res.body[1].fractal_index).to.be.equal('0.782')
             })
