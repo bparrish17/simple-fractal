@@ -15,13 +15,33 @@ export default class Root extends Component {
     }
 
     render() {
-        const candidate = this.props.candidate
+        const similar_candidates = this.props.similar_candidates
         return (
             <div>
-                <hr />
-                <h5>Title: {candidate.title}</h5>
-                <h5>Communication Score: {candidate.communication_score}</h5>
-                <h5>Coding Score: {candidate.coding_score}</h5>
+                <h3>Similar Candidates</h3>
+                <table id="candidateTable" className="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Communication Score</th>
+                            <th>Coding Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {similar_candidates.map(each_candidate => {
+                            return (
+                                <tr key={each_candidate.candidate_id}>
+                                    <th scope="row">{each_candidate.candidate_id}</th>
+                                    <td>{each_candidate.title}</td>
+                                    <td>{each_candidate.communication_score}</td>
+                                    <td>{each_candidate.coding_score}</td>
+                                </tr>
+                            )
+                        })
+                        }
+                    </tbody>
+                </table>
             </div>
         )
     }

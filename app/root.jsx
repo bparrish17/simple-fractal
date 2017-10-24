@@ -35,40 +35,49 @@ export default class Root extends Component {
         let searchResult = this.state.searchResult
         let similar_candidates = this.state.similarCandidates
         return (
-            <div>
+            <div id="search-container" className="col-xs-10">
+                <h3>Search For Candidate</h3>
+                {/* Search Form */}
+                <form id="search-candidates" onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                        <input 
+                            id="search-bar"
+                            ref="candidateId"
+                            className="form-control" 
+                            type="text" 
+                            name="candidateId" 
+                            placeholder="Enter Candidate ID" 
+                            onChange={this.handleChange}
+                            />
+                    </div>
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                <br />
+                {/* If There Is Result, Show it. Otherwise Alert That No Results Were Found */}
                 <div>
-                    <div className="col-xs-6">
-                    <h3><strong>Search For Candidate</strong></h3>
-                    <form id="search-candidates" onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <input 
-                                ref="candidateId"
-                                className="form-control" 
-                                type="text" 
-                                name="candidateId" 
-                                placeholder="Enter Candidate ID" 
-                                onChange={this.handleChange}
-                                />
-                        </div>
-                        <div className="form-group">
-                            <button type="submit" className="btn btn-primary">Search</button>
-                        </div>
-                    </form>
-                    <div>
-                    {searchResult
+                    {
+                    searchResult
                     ? <Result candidate={searchResult}/>
-                    : <div className="alert alert-warning" role="alert">
-                        No Results.
-                    </div>
+                    : <div></div> 
                     }
-                    </div>
-                    <div>
-                    {similar_candidates.length && searchResult
-                        ? similar_candidates.map(each => <Similar candidate={each} />)
-                        : <div></div>
-                        }
-                    </div>
-                    </div>
+                    {/* To Ensure That 'No Results' Only Renders When Searched */}
+                    {
+                    searchResult === undefined
+                    ? <div className="alert alert-warning" role="alert">No Results.</div>
+                    : <div></div>
+                    }
+                </div>
+                <br />
+
+                {/* Render Table of Similar Candidates, Each Row in 'Similar' Component */}
+                <div>
+                    {
+                    similar_candidates.length && searchResult
+                    ? <Similar similar_candidates={similar_candidates} />
+                    : <div></div>
+                    }
                 </div>
             </div>
         )
