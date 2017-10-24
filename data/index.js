@@ -14,11 +14,11 @@ const read_scores = new Promise((resolve, reject) => {
     const data = [];
     csv({noheader: false, headers: score_records_headers})
         .fromFile(score_records)
-        .on('json',(jsonObj)=>{
+        .on('json', (jsonObj) => {
             data.push(jsonObj)
             resolve(data)
         })
-        .on('done',(error)=>{
+        .on('done', (error) => {
             console.log('end', error)
         })
   })
